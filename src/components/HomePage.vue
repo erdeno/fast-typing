@@ -4,6 +4,7 @@
       <div class="hero-body">
         <p class="title">Hızlı yazma yarışması</p>
         <p class="subtitle">Ne kadar hızlı klavye kullandığını test et.</p>
+        <div>Doğru sayısı: {{ trueCount }} Yanlış sayısı: {{ falseCount }}</div>
         <div class="box mb-1">
           <span
             v-for="(word, key) in words"
@@ -37,12 +38,21 @@ export default {
       words: ["Elma", "Armut", "Portakal", "kiraz"],
       writtenWord: null,
       isTrue: true,
+      trueCount: 0,
+      falseCount: 0,
     };
   },
   watch: {
     writtenWord(val) {
       const word = this.words[0].slice(0, val.length);
-      this.isTrue = word == val;
+      const userWord = val.replace(" ", "");
+      this.isTrue = word == userWord;
+
+      if (val.indexOf(" ") !== -1) {
+        this.isTrue ? (this.trueCount += 1) : (this.falseCount += 1);
+        this.words.splice(0, 1);
+        this.writtenWord = "";
+      }
     },
   },
   computed: {
